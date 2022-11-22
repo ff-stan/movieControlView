@@ -13,46 +13,18 @@
         <el-container>
             <!-- 简单的新闻列表 -->
             <el-main class="content">
-                <el-card :body-style="{ padding: '0px', height: '250px' }" shadow="hover" v-for="item in newList"
-                    :key="item">
-                    <el-row>
-                        <el-col :span="8">
-                            <el-image :src="getImg(item.cover)" fil="fill"></el-image>
-                        </el-col>
-                        <el-col :span="16">
-                            <h3>{{ item.title }}</h3>
-                            <div class="news-item" v-html="item.content">
-
-                            </div>
-                            <el-row justify="space-between" style="margin:1em;font-size: .8em;">
-                                <el-col :span="8">
-                                    <span>发布于{{ item.publishDate }}</span>
-                                </el-col>
-                                <el-col :span="8" class="just-center">
-                                    <span class="just-center">
-                                        <el-icon>
-                                            <View />
-                                        </el-icon>{{ item.readNum }}
-                                    </span>
-                                    <span class="just-center">
-                                        <el-icon>
-                                            <ChatDotSquare />
-                                        </el-icon>{{ item.commentNum }}
-                                    </span>
-                                    <span class="just-center">
-                                        <el-icon>
-                                            <Star />
-                                        </el-icon>{{ item.likeNum }}
-                                    </span>
-                                </el-col>
-                            </el-row>
-                        </el-col>
-                    </el-row>
-                </el-card>
+                <NewsList :newList="newsList"></NewsList>
             </el-main>
             <!-- 服务模块 -->
             <el-asied>
-
+                <el-menu class="el-menu-vertical-demo" :collapse="true" router="true">
+                    <el-menu-item :index="'/' + item.link" v-for="item in allService">
+                        <div class="service_img">
+                            <el-image :src="getImg(item.imgUrl)" fil="fill"></el-image>
+                        </div>
+                        <template #title>{{ item.serviceName }}</template>
+                    </el-menu-item>
+                </el-menu>
             </el-asied>
         </el-container>
     </div>
@@ -64,10 +36,13 @@
 
 import { ref } from "vue"
 import api from "../api/api"
+import NewsList from "../components/NewsList.vue";
 // 轮播图图片数组
 const carouselImgs = ref([])
 // 新闻列表数组
-const newList = ref([])
+const newsList = ref([])
+// 全部服务列表数组
+const allService = ref([])
 
 // 获取轮播图图片
 api.getListAPI("/prod-api/api/rotation/list", {
@@ -80,9 +55,12 @@ api.getListAPI("/prod-api/press/press/list", {
     pageNum: 1,
     pageSize: 6
 }).then((res) => {
-    newList.value = res.data.rows
+    newsList.value = res.data.rows
 })
-
+// 获取全部服务资源
+api.getListAPI("/prod-api/api/service/list").then((res) => {
+    allService.value = res.data.rows
+})
 
 function getImg(imgUrl) { return "http://124.93.196.45:10001" + imgUrl }
 </script>
@@ -102,14 +80,6 @@ function getImg(imgUrl) { return "http://124.93.196.45:10001" + imgUrl }
         height: 100%;
     }
 
-    .news-item {
-        padding: .5em;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
-        overflow: hidden;
-    }
-
     .just-center {
         display: flex;
         justify-content: center;
@@ -119,5 +89,24 @@ function getImg(imgUrl) { return "http://124.93.196.45:10001" + imgUrl }
             margin-left: .5em;
         }
     }
+
+    .el-menu {
+        &>*+* {
+            margin-top: .5em;
+        }
+
+        .el-menu-item {
+            padding: 0;
+        }
+
+        .service_img {
+            padding: 5px;
+        }
+    }
+}
+</style>
+<style>
+.el-menu-item .el-menu-tooltip__trigger {
+    padding: 0;
 }
 </style>
