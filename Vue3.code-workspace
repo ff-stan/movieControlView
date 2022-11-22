@@ -1,0 +1,48 @@
+{
+	"folders": [
+		{
+			"name": "Vue3",
+			"path": "D:/学习资料/Vue3"
+		},
+		{
+			"name": "ajax",
+			"path": "D:/httpd-2.4.52-o111m-x64-vc15/Apache24/htdocs/ajax"
+		},
+		{
+			"name": "PHP",
+			"path": "D:/httpd-2.4.52-o111m-x64-vc15/Apache24/htdocs/PHP"
+		},
+		{
+			"name": "pattern-library",
+			"path": "D:/httpd-2.4.52-o111m-x64-vc15/Apache24/htdocs/pattern-library"
+		},
+		{
+			"name": "1+X",
+			"path": "D:/httpd-2.4.52-o111m-x64-vc15/Apache24/htdocs/1+X"
+		},
+		{
+			"name": "PIXI",
+			"path": "D:/httpd-2.4.52-o111m-x64-vc15/Apache24/htdocs/PIXI"
+		},
+		{
+			"name": "sf",
+			"path": "../sf"
+		},
+		{
+			"path": "../深入解析css"
+		},
+		{
+			"path": "../js"
+		},
+		{
+			"path": "../Vue_Cli_Demo"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "1+x",
+		"javascript.validate.enable": false
+	}
+}
