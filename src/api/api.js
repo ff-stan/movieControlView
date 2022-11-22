@@ -1,16 +1,16 @@
-// 全部导出
+// 全部导入
 import http from '../utils/http'
 /**
  * @parms request 请求地址
  * @parms '/testIp'代表vue-cil中config，index.js中配置的代理  */
- let request = "http://localhost:3000"
+ let request = "http://124.93.196.45:10001"
 
 //  导出请求方法
 export default {
-    getListAPI(path){
-        return http.get(`${request + path}`)
+    getListAPI(path,params){
+        return http.get(`${request + path}`,params)
     },
-    postFormAPI(path,data){
-        return http.post(`${request + path}`,data)
+    postFormAPI(path,params){
+        return http.post(`${request + path}`,params)
     }
 }

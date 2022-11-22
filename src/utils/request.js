@@ -5,12 +5,12 @@ import { ElMessage } from 'element-plus'
 // 创建新的axios实例
 const service = axios.create({
     // 公共接口
-    baseURL: "http://localhost:3000",
+    baseURL: "http://124.93.196.45:10001",
     // 超时时间 ms
     timeout: 3 * 1000
 })
 // 设置全局配置 post需要以Payload方式发送参数
-axios.defaults.headers.post['Content-Type'] = 'Content-Type:application/x-www-form-urlencoded; charset=UTF-8'
+// axios.defaults.headers.post['Content-Type'] = 'Content-Type:application/x-www-form-urlencoded; charset=UTF-8'
 // 请求拦截器
 service.interceptors.request.use(config => {
     // 发请求前做的一些处理,数据转化,配置请求头,设置token,设置loading等,根据需求添加
