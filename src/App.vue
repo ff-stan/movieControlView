@@ -12,7 +12,7 @@
       <el-menu-item index="/newList">新闻</el-menu-item>
       <el-menu-item index="4">Orders</el-menu-item>
     </el-menu>
-  </el-header>
+  </el-header> 
   <div class="container">
     <router-view></router-view>
   </div>
