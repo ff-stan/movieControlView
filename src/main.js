@@ -7,7 +7,7 @@ import App from './App.vue'
 // 导入vuex
 import store from '../src/store/index.js'
 // 导入vue-route
-import { router } from './route'
+import router from './route'
 
 const app = createApp(App)
 // 在全局中使用vuex

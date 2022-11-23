@@ -1,4 +1,5 @@
 <template>
+    <TopNavigation activeIndex="/home"></TopNavigation>
     <!-- 轮播图 -->
     <div class="common-layout">
         <el-container>
@@ -13,7 +14,26 @@
         <el-container>
             <!-- 简单的新闻列表 -->
             <el-main class="content">
-                <NewsList :newList="newsList"></NewsList>
+                <!-- 新闻列表 -->
+                <ArticleList :articleList="newsList">
+                    <template #articleData="data">
+                        <span class="just-center">
+                            <el-icon>
+                                <View />
+                            </el-icon>{{ data.data.readNum }}
+                        </span>
+                        <span class="just-center">
+                            <el-icon>
+                                <ChatDotSquare />
+                            </el-icon>{{ data.data.commentNum }}
+                        </span>
+                        <span class="just-center">
+                            <el-icon>
+                                <Star />
+                            </el-icon>{{ data.data.likeNum }}
+                        </span>
+                    </template>
+                </ArticleList>
             </el-main>
             <!-- 服务模块 -->
             <el-asied>
@@ -36,11 +56,15 @@
 
 import { ref } from "vue"
 import api from "../api/api"
-import NewsList from "../components/NewsList.vue";
+import TopNavigation from "../components/TopNavigation.vue"
+import ArticleList from "../components/ArticleList.vue";
+const activeIndex = ref("/home");
 // 轮播图图片数组
 const carouselImgs = ref([])
 // 新闻列表数组
 const newsList = ref([])
+// 新闻列表数组
+const activityList = ref([])
 // 全部服务列表数组
 const allService = ref([])
 
@@ -50,12 +74,19 @@ api.getListAPI("/prod-api/api/rotation/list", {
 }).then((res) => {
     carouselImgs.value = res.data.rows
 })
-// 获取新闻列表 只要时间靠前的6个
+// 获取新闻列表 只要6个
 api.getListAPI("/prod-api/press/press/list", {
     pageNum: 1,
     pageSize: 6
 }).then((res) => {
     newsList.value = res.data.rows
+})
+// 获取活动列表 只要6个
+api.getListAPI("/prod-api/api/activity/activity/list", {
+    pageNum: 1,
+    pageSize: 6
+}).then((res) => {
+    activityList.value = res.data.rows
 })
 // 获取全部服务资源
 api.getListAPI("/prod-api/api/service/list").then((res) => {

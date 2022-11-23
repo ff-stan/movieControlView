@@ -10,7 +10,7 @@ export default {
     getListAPI(path,params){
         return http.get(`${request + path}`,params)
     },
-    postFormAPI(path,params){
+    postAPI(path,params){
         return http.post(`${request + path}`,params)
     }
 }

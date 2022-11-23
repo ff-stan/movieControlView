@@ -1,5 +1,5 @@
 <template>
-    <el-card :body-style="{ padding: '0px', height: '250px' }" shadow="hover" v-for="item in newList" :key="item">
+    <el-card :body-style="{ padding: '0px', height: '250px' }" shadow="hover" v-for="item in articleList" :key="item">
         <el-row>
             <el-col :span="8">
                 <el-image :src="getImg(item.cover)" fil="fill"></el-image>
@@ -14,21 +14,7 @@
                         <span>发布于{{ item.publishDate }}</span>
                     </el-col>
                     <el-col :span="8" class="just-center">
-                        <span class="just-center">
-                            <el-icon>
-                                <View />
-                            </el-icon>{{ item.readNum }}
-                        </span>
-                        <span class="just-center">
-                            <el-icon>
-                                <ChatDotSquare />
-                            </el-icon>{{ item.commentNum }}
-                        </span>
-                        <span class="just-center">
-                            <el-icon>
-                                <Star />
-                            </el-icon>{{ item.likeNum }}
-                        </span>
+                        <slot name="articleData" :data="item"></slot>
                     </el-col>
                 </el-row>
             </el-col>
@@ -38,8 +24,8 @@
 
 <script setup>
 import { toRef } from 'vue'
-const props = defineProps(["newList"])
-const newList = toRef(props, "newList")
+const props = defineProps(["articleList"])
+const articleList = toRef(props, "articleList")
 function getImg(imgUrl) { return "http://124.93.196.45:10001" + imgUrl }
 </script>
 
