@@ -5,7 +5,7 @@ import { ElMessage } from 'element-plus'
 // 创建新的axios实例
 const service = axios.create({
     // 公共接口
-    baseURL: "http://124.93.196.45:10001",
+    baseURL: "http://amdeus.top:3000",
     // 超时时间 ms
     timeout: 3 * 1000
 })
@@ -20,7 +20,7 @@ service.interceptors.request.use(config => {
     // }
     //如有需要：注意使用token的时候需要引入cookie方法或者用本地localStorage等方法，推荐js-cookie
     //这里取token之前，你肯定需要先拿到token,存一下
-    config.headers.Authorization = sessionStorage.getItem("token") || localStorage.getItem("token"); //如果要求携带在请求头中
+    config.headers.Authorization = sessionStorage.getItem("token") || localStorage.getItem("token") //如果要求携带在请求头中
     return config
 }, error => {
     Promise.reject(error)
@@ -75,9 +75,9 @@ service.interceptors.response.use(response => {
             default:
                 error.message = `连接错误${error.response.status}`
         }
-    }else {
+    } else {
         // 超时处理
-        if(JSON.stringify(error).includes('timeout')){
+        if (JSON.stringify(error).includes('timeout')) {
             ElMessage.error('服务器响应超时,请刷新当前页')
         }
         error.message = '连接服务器失败'

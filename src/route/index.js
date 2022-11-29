@@ -1,35 +1,26 @@
 import { createRouter, createWebHashHistory } from "vue-router"
-
+import { ElMessage } from 'element-plus'
 const routes = [
     { path: "/", redirect: "/home" },
     {
         path: "/home",
         name: "home",
+        // 设置鉴权
+        meta: { permission: true },
         component: () => import("../pages/Home.vue")
     },
     {
         path: "/login",
         name: "login",
-        // 单独的路由守卫 如果已登录则直接跳转到详情页
+        // 单独的路由守卫
         beforeEnter: (to, from) => {
             if (sessionStorage.getItem("token") || localStorage.getItem("token")) {
-                return router.push("/userInfo")
+                ElMessage.success("已登录~~~")
+                return router.push("/")
             }
             return true
         },
         component: () => import("../pages/Login.vue")
-    },
-    {
-        path: "/newList",
-        name: "newList",
-        meta: { permission: true },
-        component: () => import("../pages/news/newList.vue")
-    },
-    {
-        path: "/userInfo",
-        name: "userInfo",
-        meta: { permission: true },
-        component: () => import("../pages/user/userInfo.vue")
     }
 ]
 const router = createRouter({
@@ -43,7 +34,7 @@ router.beforeEach((to, from, next) => {
         if (sessionStorage.getItem("token") || localStorage.getItem("token")) {
             next()
         } else {
-            alert("请先登录")
+            ElMessage.error('请先登录!!!')
             next("/login")
         }
     } else {

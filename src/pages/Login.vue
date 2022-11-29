@@ -6,8 +6,7 @@
                 <p class="userName">
                     <label for="userName">UserName <span>*</span>
                     </label>
-                    <input class="input" required type="text" id="userName" name="userName" v-model="userName" pattern="$" />
-                    <span class="validation error"> Please enter a valid userName</span>
+                    <input class="input" required type="text" id="userName" name="userName" v-model="userName" />
                     <span class="validation req"> This field is required</span>
                 </p>
                 <p class="password">
@@ -18,7 +17,6 @@
                 <p class="remember">
                     <input class="checkbox" type="checkbox" id="remember" v-model="isRemember" />
                     <label for="remember"> Remember me</label>
-
                 </p>
                 <p class="login">
                     <input type="button" value="Login" @click="setLogin" />
@@ -30,25 +28,37 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+
+import { ref } from 'vue'
 import api from '../api/api.js'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus';
 const userName = ref("")
 const password = ref("")
 const isRemember = ref(false)
 const router = useRouter()
-function setLogin(){
-    api.postAPI("/prod-api/api/login",{
-        username : userName.value,
-        password : password.value
+
+function setLogin() {
+    api.postAPI("/admin/adminLogin", {
+        userName: userName.value,
+        password: password.value
     }).then((res) => {
-        // 判断是否需要存储token
-        if(isRemember.value && res.data.token){
-            localStorage.setItem("token",res.data.token)
-        }else{
-            sessionStorage.setItem("token",res.data.token)
+        // 判断是否请求成功
+        if (res.data.status == 1) {
+            console.log('res.errors :>> ', res.data.errors)
+            res.data.errors.forEach(x => {
+                ElMessage.error(x.msg)
+            })
+        } else {
+            // 判断以什么方法存储token
+            if (isRemember.value) {
+                localStorage.setItem("token", res.data.token)
+            } else {
+                sessionStorage.setItem("token", res.data.token)
+            }
+            ElMessage.success("登录成功!")
+            router.push("/home")
         }
-        router.push("/home")
     })
 }
 </script>
@@ -57,16 +67,20 @@ function setLogin(){
 $primary : #FEDC2A;
 $complementary :#5A3B5D;
 $lightsep: rgb(220, 220, 220);
+
+// 将整个页面扩展到整个屏幕 不局限于双容器
 .loginPage {
     position: absolute;
     width: 100vw;
     height: 100vh;
     left: 0;
-    background: linear-gradient(to bottom right, #e67e22,#f39c12, #27ae60);
-    .form{
+    background-image: linear-gradient(120deg, #fccb90 0%, #d57eeb 100%);
+
+    .form {
         margin-top: 3em;
     }
 }
+
 .checkbox+label:before {
     background: rgb(255, 255, 255);
     border: 1px solid rgb(216, 216, 216);
@@ -101,8 +115,6 @@ $lightsep: rgb(220, 220, 220);
     transition: transform .4s;
 }
 
-
-
 /****** 2. Let's shake this form  ******/
 
 /* Creating the animation */
@@ -130,9 +142,6 @@ $lightsep: rgb(220, 220, 220);
     animation-name: shakeMe;
     animation-duration: .5s;
 }
-
-
-
 
 /****** Here come the unicorns, aka all the styling not useful for the animation demo at the conference :)  ******/
 
@@ -207,19 +216,21 @@ p.remember {
     margin: 0 auto;
     transition: background .3s;
 
+    // 选中触发 显示阴影
     &:hover {
         background: white;
         box-shadow: 5px 5px 0 0 $primary,
             inset 4px 4px 0 0 white;
     }
 
-    // &:active,
-    // &:focus {
-    /* position: relative;
-        top: 1px; */
-    // outline: none;
-    //  background: darken($primary, 10%);
-    // }
+    // 聚焦或被选中时触发
+    &:active,
+    &:focus {
+        position: relative;
+        top: 1px;
+        outline: none;
+        background: darken($primary, 10%);
+    }
 }
 
 [type="password"],
@@ -241,10 +252,17 @@ p.remember {
     transition: border-color .4s, box-shadow 1s;
 }
 
+// 被选中或聚焦时 添加上边框与阴影效果
 .input:active,
 .input:focus {
     border: 1px solid $complementary;
     box-shadow: 4px 4px 0 #C7A9CD;
+}
+
+// 当检测内容不为空时隐藏错误信息
+.input:valid~.validation {
+    opacity: 0;
+    transition: opacity .5s;
 }
 
 
@@ -293,7 +311,7 @@ p.remember {
 
 
 /****** Validation messages ******/
-
+// 错误信息的css
 .invalid {
     border-color: rgb(183, 0, 76);
 }
@@ -308,8 +326,8 @@ p.remember {
     padding-top: .5em;
     position: absolute;
     right: 0;
-    opacity: 0;
-    transition: opacity 1s;
+    opacity: 1;
+    // transition: opacity 1s;
 }
 
 .validation.req {
